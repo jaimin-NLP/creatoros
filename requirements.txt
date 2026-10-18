@@ -1,0 +1,13 @@
+# Web framework (required by the hackathon checks)
+fastapi>=0.110
+uvicorn>=0.29
+
+# LLM client - pointed at Mesh API (required by the hackathon checks)
+openai>=1.40
+
+# Agents, scheduling, UI, charts
+langgraph>=0.2
+apscheduler>=3.10,<4
+streamlit>=1.35
+matplotlib>=3.8
+python-dotenv>=1.0

@@ -1,0 +1,13 @@
+# Secrets - never commit
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local data created at runtime
+data/creatoros.db
+data/images/
+data/mesh_calls.log
