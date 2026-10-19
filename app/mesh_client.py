@@ -121,5 +121,25 @@ def generate_image(prompt: str, agent: str = "visual", content_id: int = None,
 
 
 def list_models() -> list:
-    """List models available on your Mesh account (costs no credits)."""
-    return [m.id for m in get_client().models.list().data]
+    """
+    List models available on your Mesh account (costs no credits).
+
+    Mesh returns a plain JSON list here, while the OpenAI library expects
+    {"data": [...]}, so we call the endpoint directly and accept both shapes.
+    """
+    import httpx  # installed together with the openai package
+
+    key = os.getenv("MESH_API_KEY")
+    resp = httpx.get(f"{MESH_BASE_URL}/models",
+                     headers={"Authorization": f"Bearer {key}"}, timeout=30)
+    resp.raise_for_status()
+    body = resp.json()
+    items = body.get("data", body) if isinstance(body, dict) else body
+
+    ids = []
+    for item in items:
+        if isinstance(item, str):
+            ids.append(item)
+        elif isinstance(item, dict):
+            ids.append(item.get("id") or item.get("slug") or item.get("name"))
+    return [i for i in ids if i]
